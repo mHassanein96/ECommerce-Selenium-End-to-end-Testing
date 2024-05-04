@@ -9,7 +9,7 @@ Feature: User should be able to make a new account on the site
     And enters first name "Mahmoud"
     And enters last name "Hassanein"
     And enters date of birth "30" "January" "1996"
-    And enters a valid email "zzyruhyda@closetab.email"
+    And enters a valid email "zyxxyruhyda@closetab.email"
     And enters a password "12345678"
     And enters the same password again "12345678"
     And click register

@@ -9,6 +9,8 @@ import org.junit.runner.RunWith;
         features = "src\\main\\resources\\features\\Registration.feature",
         glue = "stepDefinition",
         tags = "@Regression"
+        ,plugin = {"pretty"
+        , "me.jvt.cucumber.report.PrettyReports:target/cucumber/RegistrationReport"}
 )
 public class RegistrationTest {
 }

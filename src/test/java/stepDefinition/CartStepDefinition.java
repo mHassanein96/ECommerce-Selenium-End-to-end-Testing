@@ -1,11 +1,15 @@
 package stepDefinition;
 
 import Pages.*;
+import io.cucumber.java.After;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.java.en_scouse.An;
 import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
@@ -99,7 +103,7 @@ public class CartStepDefinition {
     }
     @And("click on checkout button")
     public void click_checkout () {
-     cartWE.checkoutButtonWE().click();
+        cartWE.checkoutButtonWE().click();
     }
     @And("click on check out as a guest")
     public void checkout_guest () throws InterruptedException {
@@ -171,9 +175,8 @@ public class CartStepDefinition {
     }
     @Then("closes the browser_Cart function")
     public void close_browser () throws InterruptedException {
-        Thread.sleep(1000);
-
-        driver.quit();
+        Thread.sleep(2000);
         soft.assertAll();
+        driver.quit();
     }
 }
