@@ -1,0 +1,118 @@
+package stepDefinition;
+
+import Pages.HomepageWebElements;
+import Pages.LoginPageWebElements;
+import Pages.RegisterPageWebElements;
+import Pages.RegistrationResultWebElements;
+import io.cucumber.java.Scenario;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.Color;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
+
+public class RegistrationStepDefinition {
+    WebDriver driver = null;
+    RegisterPageWebElements regWE;
+    HomepageWebElements homeWE;
+    RegistrationResultWebElements regResWE;
+    LoginPageWebElements logWE;
+    SoftAssert softAssert;
+    @Given("User opens the browser_Registration feature")
+    public void init_driver (){
+        //Creating Driver
+        String firfoxPath = System.getProperty("user.dir") + "\\src\\main\\resources\\geckodriver.exe";
+        System.setProperty("webDriver.gecko.driver",firfoxPath);
+
+        driver = new FirefoxDriver();
+        regWE = new RegisterPageWebElements(driver);
+        homeWE = new HomepageWebElements(driver);
+        regResWE = new RegistrationResultWebElements(driver);
+        logWE = new LoginPageWebElements(driver);
+        softAssert = new SoftAssert();
+    }
+    @Given("User navigates to the website \"(.*)\" Registration feature$")
+    public void user_navigates_to_the_Website (String Website) throws InterruptedException {
+        driver.navigate().to(Website);
+        driver.manage().window().maximize();
+        String currentWebsite = driver.getCurrentUrl();
+        Assert.assertTrue(currentWebsite.contains(Website),"Website isn't right");
+        Thread.sleep(1000);
+    }
+    @And("Clicks on register button from the homepage")
+    public void clicks_on_the_register_button () throws InterruptedException {
+        homeWE.regWE().click();
+        Thread.sleep(1000);
+    }
+    @When("User selects the gender")
+    public void user_selects_the_gender () {
+        regWE.genderWE().click();
+    }
+    @And("enters first name \"(.*)\"$")
+    public void enters_first_name (String firstName) {
+        regWE.firstNameWE().clear();
+        regWE.firstNameWE().sendKeys(firstName);
+    }
+    @And("enters last name \"(.*)\"$")
+    public void enters_last_name (String lastName) {
+        regWE.lastNameWE().clear();
+        regWE.lastNameWE().sendKeys(lastName);
+    }
+    @And("enters date of birth \"(.*)\" \"(.*)\" \"(.*)\"$")
+    public void enters_date_of_birth (String day, String month, String year) {
+        Select drpDay = new Select(regWE.day());
+        drpDay.selectByValue(day);
+        Select drpMonth = new Select(regWE.month());
+        drpMonth.selectByVisibleText(month);
+        Select drpYear = new Select(regWE.year());
+        drpYear.selectByValue(year);
+    }
+    @And("enters a valid email \"(.*)\"$")
+    public void enters_valid_email (String email) {
+        regWE.emailWE().clear();
+        regWE.emailWE().sendKeys(email);
+    }
+    @And("enters a password \"(.*)\"$")
+    public void enter_password (String password) {
+        regWE.passwordWE().clear();
+        regWE.passwordWE().sendKeys(password);
+    }
+    @And("enters the same password again \"(.*)\"$")
+    public void re_enter_password (String password) {
+        regWE.confirmPasswordWE().clear();
+        regWE.confirmPasswordWE().sendKeys(password);
+    }
+    @And("click register")
+    public void click_register () throws InterruptedException {
+        regWE.regButton().click();
+        Thread.sleep(3000);
+    }
+    @Then("User should see a success message \"(.*)\"$")
+    public void succsess_message (String msg) {
+        softAssert.assertTrue(regResWE.resultMSG().getText().contains(msg),"Expected result doesn't equal the actual result");
+    }
+    @And("the color should be green hex code= \"(.*)\"$")
+    public void succsess_msg_color (String expectedHex){
+        SoftAssert softAssert = new SoftAssert();
+        String color = regResWE.resultMSG().getCssValue("color");
+        String actualHex = Color.fromString(color).asHex();
+        softAssert.assertTrue(actualHex.contains(expectedHex));
+        softAssert.assertAll();
+
+    }
+    @And("Closes the browser_Registration feature")
+    public void close_browser () throws InterruptedException {
+        Thread.sleep(1000);
+
+        driver.quit();
+        softAssert.assertAll();
+    }
+}
